@@ -6,6 +6,7 @@ async function main() {
 
   try {
     const mockPriceFeed = await MockPriceFeed.deploy(); 
+    await mockPriceFeed.deployed();
     console.log("Mock Price Feed deployed to:", mockPriceFeed.address);
   } catch (error) {
     console.error("Error during deployment:", error);

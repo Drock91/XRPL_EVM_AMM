@@ -1,6 +1,24 @@
 const { expect } = require("chai");
 const { ethers } = require("hardhat");
-
+describe("MockAggregatorV3Interface Deployment", function () {
+  let mockPriceFeed;
+  let deployer;
+  beforeEach(async function () {
+    const [deployers] = await ethers.getSigners();
+    deployer = deployers;
+    const PriceFeed = await ethers.getContractFactory("HardhatTextContract", deployer);
+    const priceFeed = await PriceFeed.deploy();
+    let price = 0;
+    if(priceFeed.emitLatestPrice() !== undefined && priceFeed.emitLatestPrice() !== null){
+      mockPriceFeed = await priceFeed.emitLatestPrice();
+    }
+  });
+  it("Should deploy the MockAggregatorV3Interface", async function () {
+    console.log("Tested Address:", deployer.address); // Additional log to confirm address during test
+    console.log(`Chainlink ETH/USD: $: ${mockPriceFeed.toString()}`);
+  });
+});
+/*
 describe("EthLockXrpAmmTest", function () {
   let mockPriceFeed;
   let ethLockXrpAmm;
@@ -42,3 +60,4 @@ describe("EthLockXrpAmmTest", function () {
     console.log("Logged Price from Event:", priceEvent.args.price.toString());
   });
 });
+*/

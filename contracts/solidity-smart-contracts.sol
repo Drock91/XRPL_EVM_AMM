@@ -1,22 +1,21 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
-import "../test/MockAggregatorV3Interface.sol";
+pragma solidity ^0.8.24;
+import "../contracts/MockAggregatorV3Interface.sol";
+//import "@/MockAggregatorV3Interface.sol";
 
 //import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
-
 contract EthLockXrpAmm {
     address public owner;
     AggregatorV3Interface public priceFeed;
-
     mapping(address => uint256) public balances;
     event Locked(address indexed sender, uint256 amount, uint256 usdValue);
     event Unlocked(address indexed receiver, uint256 amount);
     event DebugInfo(uint256 price);
     constructor(address _priceFeedAddress) {
+        //Grab owners address
         owner = msg.sender;
-        priceFeed = AggregatorV3Interface(_priceFeedAddress);
+        priceFeed = AggregatorV3Interface(_priceFeedAddress); 
     }
-
     function getLatestPrice() public view returns (uint256) {
         (
             ,
@@ -38,7 +37,6 @@ contract EthLockXrpAmm {
         balances[msg.sender] += msg.value;
         emit Locked(msg.sender, msg.value, usdValue);
     }
-
     function unlockEther(address payable receiver, uint256 amount) public {
         require(msg.sender == owner, "Only owner can unlock ether");
         require(balances[receiver] >= amount, "Insufficient balance to unlock");
